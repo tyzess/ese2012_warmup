@@ -37,41 +37,33 @@ class UserTest < Test::Unit::TestCase
     seller.add_item(item1)
     seller.add_item(item2)
 
-
     assert_equal(seller.credits, 100)
     assert_equal(seller.items.length, 2)
-
     assert_equal(buyer.credits, 100)
     assert_equal(buyer.items.length, 0)
 
-    # try's to buy, but item is not active yet
-    buyer.buy_item(item1)
+    assert(buyer.buy_item(item1) == false, "try's to buy, but item is not active yet")
 
     assert_equal(seller.credits, 100)
     assert_equal(seller.items.length, 2)
-
     assert_equal(buyer.credits, 100)
     assert_equal(buyer.items.length, 0)
 
-    # try's to buy, but doesn't have enough credits
     item1.active = true
     buyer.credits = 98
-    buyer.buy_item(item1)
+    assert(buyer.buy_item(item1) == false, "try's to buy, but doesn't have enough credits")
 
     assert_equal(seller.credits, 100)
     assert_equal(seller.items.length, 2)
-
     assert_equal(buyer.credits, 98)
     assert_equal(buyer.items.length, 0)
 
-    # buy's it :(
     item1.active = true
     buyer.credits = 120
-    buyer.buy_item(item1)
+    assert(buyer.buy_item(item1) == true, "buy's it")
 
     assert_equal(seller.credits, 199)
     assert_equal(seller.items.length, 1)
-
     assert_equal(buyer.credits, 21)
     assert_equal(buyer.items.length, 1)
   end

@@ -1,6 +1,7 @@
 module Traders
 
   class User
+
     attr_accessor :name , :credits, :items
 
     def self.create(name)
@@ -31,11 +32,10 @@ module Traders
         seller = item.owner
         price = item.price
 
-        self.take_credits(price)
         seller.give_credits(price)
+        self.take_credits(price)
         seller.remove_item(item)
         self.add_item(item)
-        item.owner = self
         item.active = false
         true
       end
