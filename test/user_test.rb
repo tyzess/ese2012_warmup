@@ -15,9 +15,18 @@ class UserTest < Test::Unit::TestCase
     user = Traders::User.create("Lotti")
     item1 = Traders::Item.create("Dildo",22)
     item2 = Traders::Item.create("Racletteofen",11)
+    item3 = Traders::Item.create("Nintendo64",11)
     user.add_item(item1)
     user.add_item(item2)
     assert_equal(user.items.length, 2)
+    assert_equal(user.list_items, "Items: \nDildo\nRacletteofen\n")
+    user.add_item(item3)
+    assert_equal(user.items.length, 3)
+    assert_equal(user.list_items, "Items: \nDildo\nRacletteofen\nNintendo64\n")
+    user.remove_item(item1)
+    assert_equal(user.items.length, 2)
+    assert_equal(user.list_items, "Items: \nRacletteofen\nNintendo64\n")
+
   end
 
   def test_buy_item_from_user
