@@ -13,20 +13,22 @@ class UserTest < Test::Unit::TestCase
 
   def test_item_list
     user = Traders::User.create("Lotti")
-    item1 = Traders::Item.create("Dildo",22)
+    item1 = Traders::Item.create_active("Odlid",22)
     item2 = Traders::Item.create("Racletteofen",11)
     item3 = Traders::Item.create("Nintendo64",11)
     user.add_item(item1)
     user.add_item(item2)
     assert_equal(user.items.length, 2)
-    assert_equal(user.list_items, "Items: \nDildo\nRacletteofen\n")
+    assert_equal(user.list_items, "Odlid\nRacletteofen\n")
+    assert_equal(user.list_items_to_sell, "Odlid\n")
     user.add_item(item3)
     assert_equal(user.items.length, 3)
-    assert_equal(user.list_items, "Items: \nDildo\nRacletteofen\nNintendo64\n")
+    assert_equal(user.list_items, "Odlid\nRacletteofen\nNintendo64\n")
+    assert_equal(user.list_items_to_sell, "Odlid\n")
     user.remove_item(item1)
     assert_equal(user.items.length, 2)
-    assert_equal(user.list_items, "Items: \nRacletteofen\nNintendo64\n")
-
+    assert_equal(user.list_items, "Racletteofen\nNintendo64\n")
+    assert_equal(user.list_items_to_sell, "")
   end
 
   def test_buy_item_from_user
@@ -50,7 +52,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal(buyer.items.length, 0)
 
     item1.active = true
-    buyer.credits = 98
+    buyer.take_credits(2)
     assert(buyer.buy_item(item1) == false, "try's to buy, but doesn't have enough credits")
 
     assert_equal(seller.credits, 100)
@@ -59,7 +61,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal(buyer.items.length, 0)
 
     item1.active = true
-    buyer.credits = 120
+    buyer.give_credits(22)
     assert(buyer.buy_item(item1) == true, "buy's it")
 
     assert_equal(seller.credits, 199)

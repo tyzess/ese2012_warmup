@@ -4,6 +4,7 @@ module Traders
 
     attr_accessor :name , :credits, :items
 
+    # default constructor
     def self.create(name)
       user = self.new
       user.name = name
@@ -15,16 +16,20 @@ module Traders
       self.items = Array.new
     end
 
+    # adds item to user and sets items owner to user
     def add_item(item)
       items.push(item)
       item.owner = self
     end
 
+    # removes item from user and leaves it unowned
     def remove_item(item)
       items.delete(item)
       item.owner = nil
     end
 
+    # buys chosen item if its active and user has enough credits
+    # credits will be transferred to previous owner ot the item
     def buy_item(item)
       if !item.active || item.price > self.credits
         false
@@ -41,18 +46,41 @@ module Traders
       end
     end
 
+    # adds credits to user
     def give_credits(credits)
       self.credits = self.credits + credits
     end
 
+    # removes credits to user
+    # if credits are too low, credits won't be removed
     def take_credits(credits)
-      self.credits = self.credits - credits
+      if self.credits < credits
+        false
+      else
+        self.credits = self.credits - credits
+        true
+      end
     end
 
+    # lists all items owned by user
     def list_items
-      list = "Items: \n"
+      list = ""
       items.each{ |item| list = list + item.name + "\n"}
       list
+    end
+
+    # lists all items owned by user that can be sold
+    def list_items_to_sell
+      list = ""
+      items.each{ |item|
+        if item.active == true
+          list = list + item.name + "\n"
+        end}
+      list
+    end
+
+    def to_s
+      "Name: #{name} Credits:#{self.credits} Items:#{self.list_items}"
     end
 
   end
