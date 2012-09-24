@@ -16,18 +16,33 @@ class UserTest < Test::Unit::TestCase
     item1 = Traders::Item.create_active("Odlid",22)
     item2 = Traders::Item.create("Racletteofen",11)
     item3 = Traders::Item.create("Nintendo64",11)
+
+    assert_equal(user.items.length, 0)
+    assert_equal(user.list_items, "")
+    assert_equal(user.all_items, [])
+    assert_equal(user.all_items_for_sell, [])
+    assert_equal(user.list_items_to_sell, "")
+
     user.add_item(item1)
     user.add_item(item2)
     assert_equal(user.items.length, 2)
     assert_equal(user.list_items, "Odlid\nRacletteofen\n")
+    assert_equal(user.all_items, [item1, item2])
+    assert_equal(user.all_items_for_sell, [item1])
     assert_equal(user.list_items_to_sell, "Odlid\n")
+
     user.add_item(item3)
     assert_equal(user.items.length, 3)
     assert_equal(user.list_items, "Odlid\nRacletteofen\nNintendo64\n")
+    assert_equal(user.all_items, [item1, item2, item3])
+    assert_equal(user.all_items_for_sell, [item1])
     assert_equal(user.list_items_to_sell, "Odlid\n")
+
     user.remove_item(item1)
     assert_equal(user.items.length, 2)
     assert_equal(user.list_items, "Racletteofen\nNintendo64\n")
+    assert_equal(user.all_items, [item2, item3])
+    assert_equal(user.all_items_for_sell, [])
     assert_equal(user.list_items_to_sell, "")
   end
 

@@ -24,6 +24,10 @@ module Traders
       item
     end
 
+    def to_s
+      "Name: #{name} Price:#{self.price} Active:#{self.active} Owner:#{self.owner}"
+    end
+
   end
 
 end

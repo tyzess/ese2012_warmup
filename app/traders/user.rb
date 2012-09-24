@@ -62,14 +62,31 @@ module Traders
       end
     end
 
-    # lists all items owned by user
+    # returns all items owned by user
+    def all_items
+      list = Array.new
+      items.each{ |item| list.push(item)}
+      list
+    end
+
+    # returns all items owned by user that can be sold
+    def all_items_for_sell
+      list = Array.new
+      items.each{ |item|
+        if item.active == true
+          list.push(item)
+        end}
+      list
+    end
+
+    # lists all item names owned by user
     def list_items
       list = ""
       items.each{ |item| list = list + item.name + "\n"}
       list
     end
 
-    # lists all items owned by user that can be sold
+    # lists all item names owned by user that can be sold
     def list_items_to_sell
       list = ""
       items.each{ |item|
